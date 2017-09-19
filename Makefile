@@ -1,15 +1,21 @@
 .PHONEY: clean get
 default: build
+VERSION=1.0.0
+BUILD=`git rev-parse HEAD`
+VERSION=0.0.1
+BUILD=`git rev-parse HEAD`
+LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
 build: get test
 	 if [ ! -d "./bin/" ]; then mkdir ./bin/; fi
 	 cp config.json ./bin/
+
 	 env GOOS=linux GOARCH=amd64 go build -v -o ./bin/pulse ./src/
 get:
 	 go get -d ./src/
 	 go get -d ./cmd/
 cli: get testCMD
 	 if [ ! -d "./bin/" ]; then mkdir ./bin/; fi
-	 env GOOS=linux GOARCH=amd64 go build -v -o ./bin/pulseha ./cmd/
+	 env GOOS=linux GOARCH=amd64 go build ${LDFLAGS}-v -o ./bin/pulseha ./cmd/
 protos:
 	 protoc ./proto/pulse.proto --go_out=plugins=grpc:.
 testCMD:

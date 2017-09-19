@@ -7,6 +7,11 @@ import (
 	"fmt"
 )
 
+/* version, build are passed from the Makefile in LDFLAGS */
+var (
+	Version    string
+	Build      string
+)
 /**
  * Main Pulse struct type
  */
@@ -15,6 +20,8 @@ type Pulse struct {
 	Server *Server
 	Config *Config
 }
+
+
 
 /**
  * Create a new instance of PulseHA
@@ -43,13 +50,12 @@ func createPulse() (*Pulse) {
  */
 func main() {
 	// Draw logo
-	fmt.Println(`
+	fmt.Printf(`
    ___       _                  _
   / _ \_   _| |___  ___  /\  /\/_\
  / /_)/ | | | / __|/ _ \/ /_/ //_\\
 / ___/| |_| | \__ \  __/ __  /  _  \
-\/     \__,_|_|___/\___\/ /_/\_/ \_/  Version 0.0.1
-	`)
+\/     \__,_|_|___/\___\/ /_/\_/ \_/  Version` + "%s\n",Version)
 	pulse := createPulse()
 	// Load plugins
 	_, err := LoadPlugins()
